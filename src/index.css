@@ -1,1 +1,11 @@
-
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .container {
+    min-height: 100vh; /* Ocupa al menos el 100% de la altura de la ventana */
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos internos se apilen verticalmente */
+  }
+  

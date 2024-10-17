@@ -79,6 +79,9 @@ const Login = () => {
             <button type="submit" className="btn btn-primary w-100" disabled={loading}>
               {loading ? 'Cargando...' : 'Iniciar Sesión'}
             </button>
+            <button>
+              Recuperar Contraseña
+            </button>
             {error && <div className="alert alert-danger mt-3">{error}</div>}
             {success && <div className="alert alert-success mt-3">{success}</div>}
           </form>

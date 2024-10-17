@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Importa Bootstrap aquí
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 const ShowHabitacion = () => {
   const [habitaciones, setHabitaciones] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,6 @@ const ShowHabitacion = () => {
 
         const data = await response.json();
         setHabitaciones(data.data);
-        console.log(data.data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -46,38 +46,34 @@ const ShowHabitacion = () => {
   if (loading) return <div>Cargando...</div>;
 
   if (error) {
-    return (
-      <div>
-        <div>Error: {error}</div>
-      </div>
-    );
+    return <div>Error: {error}</div>;
   }
 
   return (
-    <div className="container mt-5">
-      <h1>Habitaciones</h1>
-      <table className="table">
-        <thead className="thead-dark"class="bg-primary">
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Número</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Hotel ID</th>
-            <th scope="col">Promociones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {habitaciones.map((habitacion, index) => (
-            <tr key={habitacion.id}>
-              <th scope="row">{index + 1}</th>
-              <td>{habitacion.numero}</td>
-              <td>{habitacion.tipo}</td>
-              <td>{habitacion.descripcion}</td>
-              <td>{habitacion.precio.toFixed(2)}€</td>
-              <td>{habitacion.hotel.id}</td>
-              <td>
+<div className="container mt-5 d-flex flex-column">
+      {/* Menú centrado */}
+      <nav className="navbar navbar-dark bg-primary mb-4">
+        <ul className="navbar-nav mx-auto d-flex flex-row">
+          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Inicio</a></li>
+          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Habitaciones</a></li>
+          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Servicios</a></li>
+          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Promociones</a></li>
+          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Contacto</a></li>
+        </ul>
+      </nav>
+
+      {/* Contenido de habitaciones */}
+      <div className="row flex-grow-1">
+        {habitaciones.map((habitacion, index) => (
+          <div className="col-md-4 mb-4" key={habitacion.id}>
+            <div className="card">
+              <img src={habitacion.imagen} className="card-img-top" alt={`Habitación ${habitacion.numero}`} />
+              <div className="card-body">
+                <h5 className="card-title">Habitación {habitacion.numero}</h5>
+                <p className="card-text"><strong>Tipo:</strong> {habitacion.tipo}</p>
+                <p className="card-text"><strong>Descripción:</strong> {habitacion.descripcion}</p>
+                <p className="card-text"><strong>Precio:</strong> {habitacion.precio.toFixed(2)}€</p>
+                <p className="card-text"><strong>Promociones:</strong></p>
                 {habitacion.promociones.length > 0 ? (
                   <ul>
                     {habitacion.promociones.map(promocion => (
@@ -89,11 +85,16 @@ const ShowHabitacion = () => {
                 ) : (
                   <span>No hay promociones</span>
                 )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pie de página */}
+      <footer className="bg-light text-center p-4">
+        <p>© 2024 Mi Hotel. Todos los derechos reservados.</p>
+      </footer>
     </div>
   );
 };
