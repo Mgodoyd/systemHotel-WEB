@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css'
+
 
 // Componentes para Clientes //
 import CrearCliente from './components/Clientes/createCliente';
@@ -18,7 +18,7 @@ import EditarLogin from './components/Login/changePassword';
 
 // Componentes para Menu //
 import Menu from './components/Menu/Menu';
-import Habitaciones from './components/Menu/showHabitacion';
+import Habitaciones from './components/Menu/Habitaciones';
 
 // Componentes para Reservaciones //
 import CrearReservacion from './components/Reservacion/createReservacion';
@@ -28,6 +28,7 @@ import MostrarReservacionID from './components/Reservacion/showReservacionID';
 import ActualizarReservacion from './components/Reservacion/updateReservacion';
 
 // Componentes para Servicios //
+import AgregarServicio from './components/Servicios/AgregarServicio';
 import MostrarServicios from './components/Servicios/showServicios';
 import MostrarServiciosID from './components/Servicios/showServiciosID';
   // Parqueo //
@@ -37,43 +38,44 @@ import MostrarServiciosID from './components/Servicios/showServiciosID';
   // Uso Habitacion //
   import AgregarUsoHabitacion from './components/Servicios/UsoHabitacion/createUsoHabitacion';
 
-
+import Inicio from './components/HOME/Inicio';
  
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
+    <div>
+      <Menu /> {/* Componente de menú aquí */}
+      <div className="container" style={{ padding: '20px' }}>
+        {/* Este es el contenedor donde se renderizan los componentes según la ruta */}
+        <Routes>
+          <Route path="/" element={<Inicio></Inicio>} />
+          <Route path="/Cliente/Nuevo" element={<CrearCliente />} />
+          <Route path="/Cliente/Eliminar" element={<EliminarCliente />} />
+          <Route path="/Cliente" element={<MostrarClienteID />} />
+          <Route path="/Cliente/Editar" element={<ActualizarCliente />} />
+          <Route path="/Factura/Nueva" element={<CrearFactura />} />
+          <Route path="/Factura/MostrarID" element={<MostrarFacturaID />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Login/Editar" element={<EditarLogin />} />
+          <Route path="/habitaciones" element={<Habitaciones />} />
+          <Route path="/reservacion/nueva/:id" element={<CrearReservacion />} />
+          <Route path="/Reservacion/Eliminar" element={<EliminarReservacion />} />
+          <Route path="/Reservacion" element={<MostrarReservacion />} />
+          <Route path="/Reservacion/ID" element={<MostrarReservacionID />} />
+          <Route path="/Reservacion/Editar" element={<ActualizarReservacion />} />
 
-        <Route path="/Cliente/Nuevo" element={<CrearCliente />} />
-        <Route path="/Cliente/Eliminar" element={<EliminarCliente />} />
-        <Route path="/Cliente" element={<MostrarClienteID />} />
-        <Route path="/Cliente/Editar" element={<ActualizarCliente />} />
-        
-        <Route path="/Factura/Nueva" element={<CrearFactura />} />
-        <Route path="/Factura/MostrarID" element={<MostrarFacturaID />} />
-
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Login/Editar" element={<EditarLogin />} />
-
-        <Route path="/Menu" element={<Menu />} />
-        <Route path="/Habitaciones" element={<Habitaciones />} />
-
-        <Route path="/Reservacion/Nueva" element={<CrearReservacion />} />
-        <Route path="/Reservacion/Eliminar" element={<EliminarReservacion />} />
-        <Route path="/Reservacion" element={<MostrarReservacion />} />
-        <Route path="/Reservacion/ID" element={<MostrarReservacionID />} />
-        <Route path="/Reservacion/Editar" element={<ActualizarReservacion />} />
-
-        <Route path="/Servicio/servicio" element={<MostrarServicios />} />
-        <Route path="/Servicio/ID" element={<MostrarServiciosID />} />
-        <Route path="/Servicio/Parqueo/Nuevo" element={<AgregarParqueo />} />
-        <Route path="/Servicio/Habitacion/Nuevo" element={<AgregarServicioHabitacion />} />
-        <Route path="/Servicio/Uso/Nuevo" element={<AgregarUsoHabitacion />} />
       
-      </Routes>
-    </Router>
-  );
+          <Route path="/Agregar/servicio/:id" element={<AgregarServicio/>} />
+          <Route path="/Servicio/servicio" element={<MostrarServicios />} />
+          <Route path="/Servicio/ID" element={<MostrarServiciosID />} />
+          <Route path="/Servicio/Parqueo/Nuevo" element={<AgregarParqueo />} />
+          <Route path="/Servicio/Habitacion/Nuevo" element={<AgregarServicioHabitacion />} />
+          <Route path="/Servicio/Uso/Nuevo" element={<AgregarUsoHabitacion />} />
+        </Routes>
+      </div> {/* Fin del contenedor */}
+    </div>
+  </Router>
+);
 }
 
 export default App;

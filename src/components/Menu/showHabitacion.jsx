@@ -50,21 +50,9 @@ const ShowHabitacion = () => {
   }
 
   return (
-<div className="container mt-5 d-flex flex-column">
-      {/* Menú centrado */}
-      <nav className="navbar navbar-dark bg-primary mb-4">
-        <ul className="navbar-nav mx-auto d-flex flex-row">
-          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Inicio</a></li>
-          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Habitaciones</a></li>
-          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Servicios</a></li>
-          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Promociones</a></li>
-          <li className="nav-item mx-3"><a className="nav-link text-white" href="#">Contacto</a></li>
-        </ul>
-      </nav>
-
-      {/* Contenido de habitaciones */}
+    <div className="container mt-5 d-flex flex-column">
       <div className="row flex-grow-1">
-        {habitaciones.map((habitacion, index) => (
+        {habitaciones.map((habitacion) => (
           <div className="col-md-4 mb-4" key={habitacion.id}>
             <div className="card">
               <img src={habitacion.imagen} className="card-img-top" alt={`Habitación ${habitacion.numero}`} />
@@ -72,7 +60,7 @@ const ShowHabitacion = () => {
                 <h5 className="card-title">Habitación {habitacion.numero}</h5>
                 <p className="card-text"><strong>Tipo:</strong> {habitacion.tipo}</p>
                 <p className="card-text"><strong>Descripción:</strong> {habitacion.descripcion}</p>
-                <p className="card-text"><strong>Precio:</strong> {habitacion.precio.toFixed(2)}€</p>
+                <p className="card-text"><strong>Precio:</strong> {habitacion.precio.toFixed(2)}$</p>
                 <p className="card-text"><strong>Promociones:</strong></p>
                 {habitacion.promociones.length > 0 ? (
                   <ul>
@@ -85,16 +73,23 @@ const ShowHabitacion = () => {
                 ) : (
                   <span>No hay promociones</span>
                 )}
+                <div className="d-flex justify-content-between mt-3">
+                <button 
+  className="btn btn-primary" 
+  onClick={() => navigate(`/reservacion/nueva/${habitacion.id}`)} // Actualizado aquí
+>
+  Reservar
+</button>
+
+                  <button className="btn btn-secondary">
+                    Ver
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
-
-      {/* Pie de página */}
-      <footer className="bg-light text-center p-4">
-        <p>© 2024 Mi Hotel. Todos los derechos reservados.</p>
-      </footer>
     </div>
   );
 };

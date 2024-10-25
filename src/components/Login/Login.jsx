@@ -28,24 +28,23 @@ const Login = () => {
       if (!response.ok) {
         throw new Error('Error en la autenticación');
       }
-
+ // Mostrar la respuesta completa en la consola
+ 
       const data = await response.json();
-      console.log('Respuesta de la API:', data); // Verifica la respuesta completa
-
-      // Guardar el JWT en el localStorage
       localStorage.setItem('token', data.data.jwt);
-      console.log('Token guardado:', data.data.jwt); // Verifica el token guardado
-
       setSuccess('Inicio de sesión exitoso');
-
-      // Redirigir a la ruta de ShowHabitacion
-      navigate('/Menu'); // Cambia a la ruta correcta
+      console.log('Respuesta de la API:', data);
+      navigate('/Menu'); // Redirige al menú
 
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleChangePassword = () => {
+    navigate('/Login/Editar'); // Redirige al componente de cambiar contraseña
   };
 
   return (
@@ -79,7 +78,7 @@ const Login = () => {
             <button type="submit" className="btn btn-primary w-100" disabled={loading}>
               {loading ? 'Cargando...' : 'Iniciar Sesión'}
             </button>
-            <button>
+            <button type="button" onClick={handleChangePassword} className="btn btn-link mt-2">
               Recuperar Contraseña
             </button>
             {error && <div className="alert alert-danger mt-3">{error}</div>}

@@ -1,0 +1,35 @@
+.testimonios-container {
+    padding: 20px;
+    text-align: center;
+    background-color: #f8f9fa; /* Color de fondo claro */
+  }
+  
+  .testimonios-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacio entre tarjetas */
+    flex-wrap: wrap; /* Permite que las tarjetas se ajusten en varias filas */
+  }
+  
+  .testimonio-card {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    width: 250px; /* Ajusta el ancho según lo necesites */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+  }
+  
+  .testimonio-card:hover {
+    transform: translateY(-5px); /* Efecto hover */
+  }
+  
+  .testimonio-foto {
+    border-radius: 50%;
+    width: 100px; /* Tamaño de la foto */
+    height: 100px; /* Tamaño de la foto */
+    object-fit: cover; /* Ajusta la foto */
+    margin-bottom: 10px; /* Espacio entre foto y texto */
+  }
+  

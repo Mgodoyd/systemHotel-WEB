@@ -1,0 +1,56 @@
+.contacto-container {
+    padding: 20px;
+    text-align: center;
+    background-color: transparent; /* Sin fondo */
+    border: none; /* Sin borde */
+  }
+  
+  .contacto-info {
+    display: flex;
+    justify-content: center; /* Centra los elementos horizontalmente */
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten a múltiples líneas si es necesario */
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 20px; /* Espacio entre los ítems */
+  }
+  
+  .contact-icon {
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
+    font-size: 24px; /* Tamaño del ícono */
+  }
+  
+  .social-media {
+    margin-top: 20px;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacio entre íconos */
+  }
+  
+  .social-icons a {
+    font-size: 24px; /* Tamaño de los íconos de redes sociales */
+    transition: color 0.3s; /* Transición para el hover */
+  }
+  
+  .social-icons a:hover {
+    opacity: 0.8; /* Efecto al pasar el mouse */
+  }
+  
+  .social-icons a.facebook {
+    color: #3b5998; /* Color de Facebook */
+  }
+  
+  .social-icons a.twitter {
+    color: #1da1f2; /* Color de Twitter */
+  }
+  
+  .social-icons a.instagram {
+    color: #c32aa3; /* Color de Instagram */
+  }
+  
