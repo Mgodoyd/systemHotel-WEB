@@ -16,6 +16,7 @@ const CreateReservacion = () => {
     setSuccess(null);
 
     const token = localStorage.getItem('token'); // Obtener el token JWT
+    const Id = localStorage.getItem('userId');
 
     try {
       const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/reservaciones', {

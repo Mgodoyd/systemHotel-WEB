@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ChangePassword = () => {
-  const navigate = useNavigate(); // Coloca aquí el uso de useNavigate
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -10,7 +12,6 @@ const ChangePassword = () => {
   const [error, setError] = useState(null);
 
   const validatePassword = (password) => {
-    // Ejemplo de validación de contraseña fuerte
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
@@ -25,15 +26,15 @@ const ChangePassword = () => {
     setError(null);
     setSuccess(null);
 
-    // Validar que las contraseñas coincidan
     if (newPassword !== confirmPassword) {
       setError('Las contraseñas no coinciden');
+      toast.error('Las contraseñas no coinciden');
       return;
     }
 
-    // Validar la fuerza de la nueva contraseña
     if (!validatePassword(newPassword)) {
       setError('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.');
+      toast.error('Contraseña no válida.');
       return;
     }
 
@@ -52,15 +53,22 @@ const ChangePassword = () => {
 
       const data = await response.json();
       setSuccess('Contraseña cambiada con éxito');
-      console.log(data); // Opcional: Puedes verificar la respuesta
+      toast.success('Contraseña cambiada con éxito');
+      console.log(data);
+
+      // Redirigir al login después de 2 segundos
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000); // Espera 2000 ms (2 segundos)
 
     } catch (error) {
       setError(error.message);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
   const login = () => {
-    navigate('/login'); // Redirige al login
+    navigate('/login');
   };
 
   return (
@@ -108,9 +116,9 @@ const ChangePassword = () => {
           Regresar
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };
 
 export default ChangePassword;
-

@@ -39,6 +39,7 @@ import MostrarServiciosID from './components/Servicios/showServiciosID';
   import AgregarUsoHabitacion from './components/Servicios/UsoHabitacion/createUsoHabitacion';
 
 import Inicio from './components/HOME/Inicio';
+import ShowClienteID from './components/Clientes/showClienteID';
  
 function App() {
   return (
@@ -49,6 +50,8 @@ function App() {
         {/* Este es el contenedor donde se renderizan los componentes según la ruta */}
         <Routes>
           <Route path="/" element={<Inicio></Inicio>} />
+       
+
           <Route path="/Cliente/Nuevo" element={<CrearCliente />} />
           <Route path="/Cliente/Eliminar" element={<EliminarCliente />} />
           <Route path="/Cliente" element={<MostrarClienteID />} />
@@ -61,7 +64,7 @@ function App() {
           <Route path="/reservacion/nueva/:id" element={<CrearReservacion />} />
           <Route path="/Reservacion/Eliminar" element={<EliminarReservacion />} />
           <Route path="/Reservacion" element={<MostrarReservacion />} />
-          <Route path="/Reservacion/ID" element={<MostrarReservacionID />} />
+          <Route path="/Reservacion/ID" element={<ShowClienteID />} />
           <Route path="/Reservacion/Editar" element={<ActualizarReservacion />} />
 
       

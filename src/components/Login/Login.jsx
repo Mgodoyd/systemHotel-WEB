@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { jwtDecode } from 'jwt-decode';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
 
   const navigate = useNavigate();
 
@@ -14,7 +15,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setSuccess(null);
 
     try {
       const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/login', {
@@ -28,16 +28,30 @@ const Login = () => {
       if (!response.ok) {
         throw new Error('Error en la autenticación');
       }
- // Mostrar la respuesta completa en la consola
- 
+
       const data = await response.json();
-      localStorage.setItem('token', data.data.jwt);
-      setSuccess('Inicio de sesión exitoso');
-      console.log('Respuesta de la API:', data);
-      navigate('/Menu'); // Redirige al menú
+      const token = data.data.jwt;
+
+      // Decodificar el token
+      const decodedToken = jwtDecode(token);
+      const { id, name } = decodedToken;
+
+      // Guardar el token, id y nombre en localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', id);
+      localStorage.setItem('userName', name);
+      console.log(id);
+
+      toast.success('Inicio de sesión exitoso'); // Notificación de éxito
+
+      // Usar setTimeout para esperar antes de redirigir
+      setTimeout(() => {
+        navigate('/'); // Redirige al menú
+      }, 2000); // 2000 ms = 2 segundos
 
     } catch (error) {
       setError(error.message);
+      toast.error(`Error: ${error.message}`); // Notificación de error
     } finally {
       setLoading(false);
     }
@@ -82,10 +96,10 @@ const Login = () => {
               Recuperar Contraseña
             </button>
             {error && <div className="alert alert-danger mt-3">{error}</div>}
-            {success && <div className="alert alert-success mt-3">{success}</div>}
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

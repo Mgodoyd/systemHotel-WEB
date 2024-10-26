@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const showReservacion = () => {
+const ShowReservacion = () => {
   const [reservaciones, setReservaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,14 +12,16 @@ const showReservacion = () => {
   useEffect(() => {
     const fetchReservaciones = async () => {
       const token = localStorage.getItem('token');
-      if (!token) {
-        setError('No se encontró el token. Por favor inicia sesión nuevamente.');
+      const clienteId = localStorage.getItem('userId');
+
+      if (!token || !clienteId) {
+        setError('No se encontró el token o ID del cliente. Por favor inicia sesión nuevamente.');
         navigate('/'); // Redirigir a Login si no hay token
         return;
       }
 
       try {
-        const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/reservaciones', {
+        const response = await fetch(`https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/reservaciones?clienteId=${clienteId}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -30,8 +34,10 @@ const showReservacion = () => {
 
         const data = await response.json();
         setReservaciones(data.data);
+        toast.success('Reservaciones cargadas con éxito'); // Mensaje de éxito al cargar
       } catch (error) {
         setError(error.message);
+        toast.error(error.message); // Muestra el mensaje de error
       } finally {
         setLoading(false);
       }
@@ -45,20 +51,24 @@ const showReservacion = () => {
 
     if (window.confirm('¿Estás seguro de que quieres eliminar esta reservación?')) {
       try {
-        const response = await fetch(`https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/reservaciones/${id}`, {
+        const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/reservaciones', {
           method: 'DELETE',
           headers: {
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
+          body: JSON.stringify({ id }), // Enviar el ID en el cuerpo de la solicitud
         });
 
         if (!response.ok) {
           throw new Error('Error al eliminar la reservación');
         }
 
-        setReservaciones((prev) => prev.filter((res) => res.id !== id));
+        setReservaciones((prev) => prev.filter((res) => res.id !== id)); // Actualizar el estado para eliminar la reservación de la lista
+        toast.success('Reservación eliminada con éxito'); // Mensaje de éxito al eliminar
       } catch (error) {
         setError(error.message);
+        toast.error(error.message); // Muestra el mensaje de error
       }
     }
   };
@@ -75,6 +85,7 @@ const showReservacion = () => {
 
   return (
     <div className="container mt-5">
+      <ToastContainer />
       <h1 className="text-center">Lista de Reservaciones</h1>
       <div className="d-flex flex-wrap justify-content-start">
         {reservaciones.map((reservacion) => (
@@ -98,7 +109,7 @@ const showReservacion = () => {
               <ul>
                 {reservacion.servicios.length > 0 ? (
                   reservacion.servicios.map((servicio, index) => (
-                    <li key={index}>{servicio.nombre}</li> // Cambia según la propiedad que quieras mostrar
+                    <li key={index}>{servicio.nombre}</li>
                   ))
                 ) : (
                   <li>No hay servicios adicionales.</li>
@@ -136,4 +147,4 @@ const showReservacion = () => {
   );
 };
 
-export default showReservacion;
+export default ShowReservacion;
