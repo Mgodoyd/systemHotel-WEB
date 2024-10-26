@@ -110,12 +110,7 @@ const ShowHabitacion = () => {
                   >
                     Reservar
                   </button>
-                  <button 
-                    className="btn btn-secondary" 
-                    onClick={() => handleVer(habitacion)}
-                  >
-                    Ver
-                  </button>
+                
                 </div>
               </div>
             </div>

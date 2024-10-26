@@ -25,7 +25,7 @@ const Menu = () => {
           {token && userId && userName ? (
             <>
               <Link className="nav-link mx-3" to="/Reservacion">Reservacion</Link>
-              <Link className="nav-link mx-3" to="/Cliente/Nuevo">Registrarme</Link>
+              
               <Link className="nav-link mx-3" to="/habitaciones">Habitaciones</Link>
               <span className="navbar-text mx-3">Hola, {userName}</span>
               <button className="btn btn-outline-light mx-2" onClick={handleLogout}>

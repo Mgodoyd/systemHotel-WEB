@@ -33,7 +33,7 @@ const CreateReservacion = () => {
           estado, // Estado predeterminado
         }),
       });
-
+  console.log(dataToSend)
       if (!response.ok) {
         throw new Error('Error al crear la reservación');
       }

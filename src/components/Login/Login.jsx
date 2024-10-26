@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { jwtDecode } from 'jwt-decode';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,26 +33,23 @@ const Login = () => {
       const data = await response.json();
       const token = data.data.jwt;
 
-      // Decodificar el token
       const decodedToken = jwtDecode(token);
       const { id, name } = decodedToken;
 
-      // Guardar el token, id y nombre en localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('userId', id);
       localStorage.setItem('userName', name);
       console.log(id);
 
-      toast.success('Inicio de sesión exitoso'); // Notificación de éxito
+      toast.success('Inicio de sesión exitoso');
 
-      // Usar setTimeout para esperar antes de redirigir
       setTimeout(() => {
         navigate('/'); // Redirige al menú
-      }, 2000); // 2000 ms = 2 segundos
+      }, 2000);
 
     } catch (error) {
       setError(error.message);
-      toast.error(`Error: ${error.message}`); // Notificación de error
+      toast.error(`Error: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -59,6 +57,10 @@ const Login = () => {
 
   const handleChangePassword = () => {
     navigate('/Login/Editar'); // Redirige al componente de cambiar contraseña
+  };
+
+  const handleRegister = () => {
+    navigate('/Cliente/Nuevo'); // Redirige a la página de registro
   };
 
   return (
@@ -94,6 +96,13 @@ const Login = () => {
             </button>
             <button type="button" onClick={handleChangePassword} className="btn btn-link mt-2">
               Recuperar Contraseña
+            </button>
+            <button 
+              type="button" 
+              onClick={handleRegister} 
+              className="btn btn-success w-100 mt-2" // Cambia la clase aquí
+            >
+              Registro
             </button>
             {error && <div className="alert alert-danger mt-3">{error}</div>}
           </form>
