@@ -4,13 +4,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const CreateCliente = () => {
   const [formData, setFormData] = useState({
-    role: 'CLIENT',
     nombre: '',
     nit: '',
     telefono: '',
     email: '',
     direccion: '',
-    password: '' // Agregar el campo de contraseña
+    password: ''
   });
 
   const handleChange = (e) => {
@@ -24,33 +23,48 @@ const CreateCliente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const dataToSend = {
+      rol: {
+        id: "c72ba3a4-4f05-437c-850f-0f0b3b9bf399"
+      },
+      hotel: {
+        id: "bab38f8a-c8b9-457d-8223-09460687c93f"
+      },
+      name: formData.nombre, // Captura el nombre del formulario
+      phone: formData.telefono, // Captura el teléfono del formulario
+      email: formData.email, // Captura el email del formulario
+      password: formData.password, // Captura la contraseña del formulario
+      address: formData.direccion, // Captura la dirección del formulario
+      role: 'CLIENT' // Rol fijo
+    };
+
+    // console.log(dataToSend)
 
     try {
       const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-          
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(dataToSend) // Enviar los datos aquí
       });
-
+   
       if (!response.ok) {
+        console.log(response.error);
         throw new Error('Error al crear el cliente');
       }
 
       const result = await response.json();
       toast.success('Cliente creado exitosamente'); // Notificación de éxito
 
-      // Resetea el formulario si es necesario
+      // Resetea el formulario
       setFormData({
-        role: 'CLIENT',
         nombre: '',
         nit: '',
         telefono: '',
         email: '',
         direccion: '',
-        password: '' // Resetea la contraseña también
+        password: ''
       });
     } catch (err) {
       toast.error(`Error: ${err.message}`); // Notificación de error
