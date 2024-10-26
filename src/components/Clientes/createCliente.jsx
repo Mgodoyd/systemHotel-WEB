@@ -24,14 +24,13 @@ const CreateCliente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token'); // Obtener el token del localStorage
 
     try {
-      const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/clientes', {
+      const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Usar el token en la solicitud
+          'Content-Type': 'application/json'
+          
         },
         body: JSON.stringify(formData)
       });
@@ -60,7 +59,7 @@ const CreateCliente = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center">Crear Cliente</h2>
+      <h2 className="text-center">Registro</h2>
       <form onSubmit={handleSubmit} className="card p-4">
         <div className="mb-3">
           <label htmlFor="nombre" className="form-label">Nombre</label>
