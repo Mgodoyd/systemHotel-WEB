@@ -27,7 +27,6 @@ const ShowReservacion = () => {
           },
         });
 
-        // Log para ver la respuesta antes de intentar convertirla
         const text = await response.text(); // Obtener la respuesta como texto
         console.log('Respuesta de la API:', text); // Muestra el texto de la respuesta
 
@@ -35,7 +34,9 @@ const ShowReservacion = () => {
         const data = JSON.parse(text); 
 
         if (data.status === "OK") {
-          setReservaciones(data.data);
+          const userId = localStorage.getItem('userId'); // Obtener el ID del cliente del localStorage
+          const filteredReservaciones = data.data.filter(reservacion => reservacion.cliente?.id === userId);
+          setReservaciones(filteredReservaciones);
           toast.success('Reservaciones cargadas con éxito');
         } else {
           throw new Error(data.message || 'Error desconocido');
@@ -98,9 +99,9 @@ const ShowReservacion = () => {
         {reservaciones.map((reservacion) => (
           <div key={reservacion.id} className="card reservacion-card m-2" style={{ minWidth: '300px', flex: '1 1 auto' }}>
             <div className="card-body">
-              <h5>ID de Reservación: {reservacion.id}</h5>
-              <h6>Cliente:</h6>
-              <p>ID: {reservacion.cliente?.id}</p>
+              <h5>No: Reservacion: {reservacion.id.slice(0, 5)} </h5> {/* Solo los primeros 5 dígitos */}
+              
+              
               <p>Nombre: {reservacion.cliente?.name}</p>
               <p>NIT: {reservacion.cliente?.nit}</p>
               <h6>Habitación:</h6>
