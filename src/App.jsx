@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Cliente from './components/Clientes/Cliente';
 import Pruebas from './components/Menu/Pruebas';
+
+import ShowServicios from './components/Servicios/showServicios';
 // Componentes para Clientes //
 import CrearCliente from './components/Clientes/createCliente';
 import EliminarCliente from './components/Clientes/deleteCliente';
@@ -54,6 +56,9 @@ function App() {
           <Route path="/Pruebas" element={<Pruebas></Pruebas>} />
 
           <Route path="/Cliente" element={<Cliente />} />
+
+          <Route path="/Servicios" element={<ShowServicios />} />
+
           <Route path="/Cliente/Nuevo" element={<CrearCliente />} />
           <Route path="/Cliente/Eliminar" element={<EliminarCliente />} />
           <Route path="/Cliente" element={<MostrarClienteID />} />

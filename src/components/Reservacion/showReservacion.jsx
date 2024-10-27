@@ -99,7 +99,7 @@ const ShowReservacion = () => {
         {reservaciones.map((reservacion) => (
           <div key={reservacion.id} className="card reservacion-card m-2" style={{ minWidth: '300px', flex: '1 1 auto' }}>
             <div className="card-body">
-              <h5>No: Reservacion: {reservacion.id.slice(0, 5)} </h5> {/* Solo los primeros 5 dígitos */}
+              <h5>No:: {reservacion.id.slice(0, 5)}***** </h5> {/* Solo los primeros 5 dígitos */}
               
               
               <p>Nombre: {reservacion.cliente?.name}</p>
@@ -142,7 +142,7 @@ const ShowReservacion = () => {
                 </button>
                 <button 
                   className="btn btn-primary" 
-                  onClick={() => navigate(`/Agregar/servicio/${reservacion.id}`)}
+                  onClick={() => navigate(`/Servicios`)}
                 >
                   Agregar Servicio
                 </button>
