@@ -10,7 +10,6 @@ const ShowHabitacion = () => {
   const [error, setError] = useState(null);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,27 +18,30 @@ const ShowHabitacion = () => {
         const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/habitaciones', {
           method: 'GET',
           headers: {
-            
             'Content-Type': 'application/json',
           },
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Error al obtener datos');
-        }
+        const responseText = await response.text();
+        console.log(responseText); // Imprimir la respuesta en crudo
 
-        const data = await response.json();
-        console.log(data); // Verifica la estructura del JSON
+        // Intentar convertir a JSON
+        try {
+          const data = JSON.parse(responseText);
+          console.log(data); // Verifica la estructura del JSON
 
-        if (Array.isArray(data.data)) {
-          setHabitaciones(data.data);
-          toast.success('Habitaciones cargadas con éxito!');
-        } else {
-          throw new Error('Los datos no son un array válido');
+          if (Array.isArray(data.data)) {
+            setHabitaciones(data.data);
+            toast.success('Habitaciones cargadas con éxito!');
+          } else {
+            throw new Error('Los datos no son un array válido');
+          }
+        } catch (parseError) {
+          console.error('Error al analizar JSON:', parseError);
+          setError('Error al analizar la respuesta de la API.');
+          toast.error('Error al analizar la respuesta de la API.');
         }
       } catch (error) {
-  
         setError(error.message);
         toast.error(`Error: ${error.message}`);
       } finally {
@@ -55,7 +57,6 @@ const ShowHabitacion = () => {
     const userId = localStorage.getItem('userId');
 
     if (!token || !userId) {
-      setHabitacionToReserve(habitacionId);
       setShowLoginPrompt(true);
     } else {
       navigate(`/reservacion/nueva/${habitacionId}`);
@@ -73,10 +74,7 @@ const ShowHabitacion = () => {
   };
 
   if (loading) return <div>Cargando...</div>;
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="container mt-5 d-flex flex-column">
@@ -92,7 +90,7 @@ const ShowHabitacion = () => {
                 <p className="card-text"><strong>Descripción:</strong> {habitacion.descripcion}</p>
                 <p className="card-text"><strong>Precio:</strong> {habitacion.precio.toFixed(2)}$</p>
                 <p className="card-text"><strong>Promociones:</strong></p>
-                {habitacion.promociones.length > 0 ? (
+                {Array.isArray(habitacion.promociones) && habitacion.promociones.length > 0 ? (
                   <ul>
                     {habitacion.promociones.map(promocion => (
                       <li key={promocion.id}>
@@ -117,16 +115,6 @@ const ShowHabitacion = () => {
         ))}
       </div>
 
-      {selectedHabitacion && (
-        <div className="modal" style={{ display: 'block', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <div className="modal-content" style={{ margin: 'auto', padding: '20px', backgroundColor: 'white', borderRadius: '5px' }}>
-           
-            <img src={selectedHabitacion.imagen} alt={`Habitación ${selectedHabitacion.numero}`} style={{ width: '100%', height: 'auto' }} />
-            <h5>{selectedHabitacion.descripcion}</h5>
-          </div>
-        </div>
-      )}
-
       {showLoginPrompt && (
         <div className="modal" style={{ display: 'block', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <div className="modal-content" style={{ margin: 'auto', padding: '20px', backgroundColor: 'white', borderRadius: '5px' }}>
@@ -144,3 +132,4 @@ const ShowHabitacion = () => {
 };
 
 export default ShowHabitacion;
+
