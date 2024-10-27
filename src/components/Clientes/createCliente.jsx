@@ -33,9 +33,10 @@ const CreateCliente = () => {
       name: formData.nombre, // Captura el nombre del formulario
       phone: formData.telefono, // Captura el teléfono del formulario
       email: formData.email, // Captura el email del formulario
+      nit: formData.nit,
       password: formData.password, // Captura la contraseña del formulario
       address: formData.direccion, // Captura la dirección del formulario
-      role: 'CLIENT' // Rol fijo
+      role: 'ADMIN' // Rol fijo
     };
 
     // console.log(dataToSend)
@@ -54,7 +55,7 @@ const CreateCliente = () => {
         throw new Error('Error al crear el cliente');
       }
 
-      const result = await response.json();
+
       toast.success('Cliente creado exitosamente'); // Notificación de éxito
 
       // Resetea el formulario

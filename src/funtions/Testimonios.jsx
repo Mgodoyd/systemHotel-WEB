@@ -7,7 +7,7 @@ const Testimonios = () => {
     {
       nombre: 'Juan Pérez',
       comentario: '¡Tuve una estancia maravillosa! El servicio fue excelente y las instalaciones son de primera.',
-      foto: 'https://via.placeholder.com/100', // Reemplaza con la URL de la foto del cliente
+      foto: 'https://thumbs.dreamstime.com/b/hombre-satisfecho-imagen-de-fondo-blanco-178686458.jpg', // Reemplaza con la URL de la foto del cliente
     },
     {
       nombre: 'María López',

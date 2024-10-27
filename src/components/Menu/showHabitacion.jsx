@@ -8,9 +8,9 @@ const ShowHabitacion = () => {
   const [habitaciones, setHabitaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedHabitacion, setSelectedHabitacion] = useState(null);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
-  const [habitacionToReserve, setHabitacionToReserve] = useState(null);
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,7 +19,8 @@ const ShowHabitacion = () => {
         const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/habitaciones', {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json'
+            
+            'Content-Type': 'application/json',
           },
         });
 
@@ -29,11 +30,18 @@ const ShowHabitacion = () => {
         }
 
         const data = await response.json();
-        setHabitaciones(data.data);
-        toast.success('Habitaciones cargadas con éxito!'); // Mensaje de éxito
+        console.log(data); // Verifica la estructura del JSON
+
+        if (Array.isArray(data.data)) {
+          setHabitaciones(data.data);
+          toast.success('Habitaciones cargadas con éxito!');
+        } else {
+          throw new Error('Los datos no son un array válido');
+        }
       } catch (error) {
+  
         setError(error.message);
-        toast.error(`Error: ${error.message}`); // Mensaje de error
+        toast.error(`Error: ${error.message}`);
       } finally {
         setLoading(false);
       }
@@ -48,28 +56,20 @@ const ShowHabitacion = () => {
 
     if (!token || !userId) {
       setHabitacionToReserve(habitacionId);
-      setShowLoginPrompt(true); // Mostrar modal de confirmación
+      setShowLoginPrompt(true);
     } else {
       navigate(`/reservacion/nueva/${habitacionId}`);
-      toast.info('Redirigiendo a la reserva...'); // Mensaje al navegar
+      toast.info('Redirigiendo a la reserva...');
     }
   };
 
   const handleConfirmLogin = () => {
     setShowLoginPrompt(false);
-    navigate('/login'); // Redirigir al login
+    navigate('/login');
   };
 
   const handleCancelLogin = () => {
     setShowLoginPrompt(false);
-  };
-
-  const handleVer = (habitacion) => {
-    setSelectedHabitacion(habitacion);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedHabitacion(null);
   };
 
   if (loading) return <div>Cargando...</div>;
@@ -110,7 +110,6 @@ const ShowHabitacion = () => {
                   >
                     Reservar
                   </button>
-                
                 </div>
               </div>
             </div>
@@ -121,7 +120,7 @@ const ShowHabitacion = () => {
       {selectedHabitacion && (
         <div className="modal" style={{ display: 'block', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <div className="modal-content" style={{ margin: 'auto', padding: '20px', backgroundColor: 'white', borderRadius: '5px' }}>
-            <span onClick={handleCloseModal} style={{ cursor: 'pointer', float: 'right', fontSize: '20px' }}>&times;</span>
+           
             <img src={selectedHabitacion.imagen} alt={`Habitación ${selectedHabitacion.numero}`} style={{ width: '100%', height: 'auto' }} />
             <h5>{selectedHabitacion.descripcion}</h5>
           </div>

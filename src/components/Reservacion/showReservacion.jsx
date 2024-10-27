@@ -12,32 +12,37 @@ const ShowReservacion = () => {
   useEffect(() => {
     const fetchReservaciones = async () => {
       const token = localStorage.getItem('token');
-      const clienteId = localStorage.getItem('userId');
 
-      if (!token || !clienteId) {
-        setError('No se encontró el token o ID del cliente. Por favor inicia sesión nuevamente.');
+      if (!token) {
+        setError('No se encontró el token. Por favor inicia sesión nuevamente.');
         navigate('/'); // Redirigir a Login si no hay token
         return;
       }
 
       try {
-        const response = await fetch(`https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/reservaciones?clienteId=${clienteId}`, {
+        const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/reservaciones', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
 
-        if (!response.ok) {
-          throw new Error('Error al obtener las reservaciones');
-        }
+        // Log para ver la respuesta antes de intentar convertirla
+        const text = await response.text(); // Obtener la respuesta como texto
+        console.log('Respuesta de la API:', text); // Muestra el texto de la respuesta
 
-        const data = await response.json();
-        setReservaciones(data.data);
-        toast.success('Reservaciones cargadas con éxito'); // Mensaje de éxito al cargar
+        // Intentar convertir la respuesta a JSON
+        const data = JSON.parse(text); 
+
+        if (data.status === "OK") {
+          setReservaciones(data.data);
+          toast.success('Reservaciones cargadas con éxito');
+        } else {
+          throw new Error(data.message || 'Error desconocido');
+        }
       } catch (error) {
         setError(error.message);
-        toast.error(error.message); // Muestra el mensaje de error
+        toast.error(error.message);
       } finally {
         setLoading(false);
       }
@@ -61,14 +66,16 @@ const ShowReservacion = () => {
         });
 
         if (!response.ok) {
+          const data = await response.json();
+          console.log(data); // Mostrar la respuesta de la API en caso de error
           throw new Error('Error al eliminar la reservación');
         }
 
-        setReservaciones((prev) => prev.filter((res) => res.id !== id)); // Actualizar el estado para eliminar la reservación de la lista
-        toast.success('Reservación eliminada con éxito'); // Mensaje de éxito al eliminar
+        setReservaciones((prev) => prev.filter((res) => res.id !== id));
+        toast.success('Reservación eliminada con éxito');
       } catch (error) {
         setError(error.message);
-        toast.error(error.message); // Muestra el mensaje de error
+        toast.error(error.message);
       }
     }
   };
@@ -93,13 +100,13 @@ const ShowReservacion = () => {
             <div className="card-body">
               <h5>ID de Reservación: {reservacion.id}</h5>
               <h6>Cliente:</h6>
-              <p>ID: {reservacion.cliente.id}</p>
-              <p>Nombre: {reservacion.cliente.nombre}</p>
-              <p>NIT: {reservacion.cliente.nit}</p>
+              <p>ID: {reservacion.cliente?.id}</p>
+              <p>Nombre: {reservacion.cliente?.name}</p>
+              <p>NIT: {reservacion.cliente?.nit}</p>
               <h6>Habitación:</h6>
-              <p>ID: {reservacion.habitacion.id}</p>
-              <p>Número: {reservacion.habitacion.numero}</p>
-              <p>Tipo: {reservacion.habitacion.tipo}</p>
+              <p>ID: {reservacion.habitacion?.id}</p>
+              <p>Número: {reservacion.habitacion?.numero}</p>
+              <p>Tipo: {reservacion.habitacion?.tipo}</p>
               <h6>Fechas:</h6>
               <p>Fecha de Entrada: {new Date(reservacion.fecha_entrada).toLocaleString()}</p>
               <p>Fecha de Salida: {new Date(reservacion.fecha_salida).toLocaleString()}</p>

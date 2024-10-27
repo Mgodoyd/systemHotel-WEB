@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const CreateReservacion = () => {
   const { id } = useParams(); // Extraer el ID de la habitación
+  const [clientes, setClientes] = useState([]); // Estado para la lista de clientes
   const [clienteId, setClienteId] = useState(''); // Estado para el ID del cliente
   const [fechaEntrada, setFechaEntrada] = useState(''); // Estado para la fecha de entrada
   const [fechaSalida, setFechaSalida] = useState(''); // Estado para la fecha de salida
@@ -10,13 +11,39 @@ const CreateReservacion = () => {
   const [error, setError] = useState(null); // Estado para errores
   const [success, setSuccess] = useState(null); // Estado para mensajes de éxito
 
+  useEffect(() => {
+    const fetchClientes = async () => {
+      const token = localStorage.getItem('token'); // Obtener el token JWT
+
+      try {
+        const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/clientes', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Incluir el token en la cabecera
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al obtener la lista de clientes');
+        }
+
+        const data = await response.json();
+        setClientes(data.data); // Guardar la lista de clientes en el estado
+
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchClientes();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
 
     const token = localStorage.getItem('token'); // Obtener el token JWT
-    const Id = localStorage.getItem('userId');
 
     try {
       const response = await fetch('https://hotel-gjayfhhpf9hna4eb.eastus-01.azurewebsites.net/api/v1/reservaciones', {
@@ -33,7 +60,7 @@ const CreateReservacion = () => {
           estado, // Estado predeterminado
         }),
       });
-  console.log(dataToSend)
+
       if (!response.ok) {
         throw new Error('Error al crear la reservación');
       }
@@ -52,15 +79,21 @@ const CreateReservacion = () => {
       <h1 className="text-center">Crear Reservación</h1>
       <form onSubmit={handleSubmit} className="card p-4">
         <div className="mb-3">
-          <label htmlFor="clienteId" className="form-label">ID del Cliente:</label>
-          <input
-            type="text"
+          <label htmlFor="clienteId" className="form-label">Seleccione Cliente:</label>
+          <select
             id="clienteId"
             className="form-control"
             value={clienteId}
             onChange={(e) => setClienteId(e.target.value)}
             required
-          />
+          >
+            <option value="" disabled>Seleccione un cliente</option>
+            {clientes.map(cliente => (
+              <option key={cliente.id} value={cliente.id}>
+                {cliente.nombre}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label htmlFor="fechaEntrada" className="form-label">Fecha de Entrada:</label>
